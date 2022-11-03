@@ -1,5 +1,114 @@
 # MyKogitoDemoPam Project
 
+Demo for IBM Kogito Operator deployments
+
+## How I built the application
+
+set some vars
+```
+GROUP_ID=marco.demos.kogito
+APP_NAME=MyKogitoDemoPam
+```
+
+create the quarkus project
+```
+quarkus create app ${GROUP_ID}:${APP_NAME} --extension='kogito-quarkus,resteasy-reactive,quarkus-smallrye-openapi,resteasy-reactive-jackson,smallrye-health'
+cd ${APP_NAME}
+```
+
+Then I've created the remote git repo 
+```
+https://github.com/marcoantonioni/MyKogitoDemoPam
+```
+
+and initialized, updated then pushed the initial project structure
+
+```
+echo "# ${APP_NAME} - demo for IBM Kogito Operator deployments" >> README.md
+git init
+git add README.md
+git commit -m "first commit for ${APP_NAME}"
+git branch -M main
+git remote add origin https://github.com/marcoantonioni/${APP_NAME}.git
+git push -u origin main
+```
+
+## The BPMN process
+
+[image]
+
+I then defined a very simple process made of log scripts, a DMN rule and an human task.
+
+The purpose is to automatically validate a request based on the age of the applicant and an amount threshold or to route to a backoffice clerk the request.
+
+For this demo we expect a REST interactivity, there are no web interaction forms.
+
+# Build and run
+
+Run a build to verify the code and configuration
+
+```
+quarkus build
+```
+
+Run the app in interactive mode
+
+```
+quarkus dev
+```
+
+## Test locally
+
+Using another shell run the following commands
+
+<i>Note: if you don't have 'jq' tool installed remove the final piping '| jq .'</i>
+
+```
+# set your base URL
+URL=http://localhost:8080
+
+# for the interactive REST gui navigate to http://<your-host-name>/q/swagger-ui/
+
+# do some health check
+curl -X GET ${URL}/q/health -H 'accept: application/json'
+curl -X GET ${URL}/q/health/live -H 'accept: application/json'
+curl -X GET ${URL}/q/health/ready -H 'accept: application/json'
+curl -X GET ${URL}/q/health/group -H 'accept: application/json'
+curl -X GET ${URL}/q/health/group/* -H 'accept: application/json'
+curl -X GET ${URL}/q/health/well -H 'accept: application/json'
+curl -X GET ${URL}/q/health/started -H 'accept: application/json'
+
+# if you want to download the open api schema doc execute
+curl -LO ${URL}/q/openapi
+
+# ping
+curl -s -w"\n" -X GET ${URL}/ping
+
+# set the service name (in this example the BPMN process service))
+SERVICE_NAME=RequestProcess
+
+# get the rule model
+curl -s -X GET -H 'accept: application/xml' ${URL}/${SERVICE_NAME}
+
+# run a request with requestor values that will be accepted
+????
+
+# run a request with requestor values that will be accepted
+????
+
+```
+
+## Deploy on OpenShift cluster using IBM Kogito Operator
+
+[TBD] See "..." at link "..."
+
+# Useful infos
+
+
+
+
+# Useful infos
+
 This project uses Quarkus, the Supersonic Subatomic Java Framework.
 
 If you want to learn more about Quarkus, please visit its website: https://quarkus.io/ .
