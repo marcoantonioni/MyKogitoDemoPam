@@ -119,10 +119,6 @@ curl -s -X POST -H 'accept: application/json' -H 'Content-Type: application/json
 
 [TBD] See "..." at link "..."
 
-# Useful infos
-
-
-
 
 # Useful infos
 
