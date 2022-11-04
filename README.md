@@ -84,17 +84,34 @@ curl -LO ${URL}/q/openapi
 # ping
 curl -s -w"\n" -X GET ${URL}/ping
 
-# set the service name (in this example the BPMN process service))
+# set vars
+URL=http://localhost:8080
 SERVICE_NAME=RequestProcess
 
-# get the rule model
+# get the process model
 curl -s -X GET -H 'accept: application/xml' ${URL}/${SERVICE_NAME}
 
-# run a request with requestor values that will be accepted
-????
+# start a couple of instances
+curl -s -X POST -H 'accept: application/json' -H 'Content-Type: application/json' ${URL}/${SERVICE_NAME} -d '{ "amount": 70000, "requestorAge": 58, "requestorName": "Marco" }' | jq .
 
-# run a request with requestor values that will be accepted
-????
+curl -s -X POST -H 'accept: application/json' -H 'Content-Type: application/json' ${URL}/${SERVICE_NAME} -d '{ "amount": 6000, "requestorAge": 12, "requestorName": "Baby" }' | jq .
+
+# get running instances (the first has been accepted automatically, the second has been routed to human task)
+curl -s -X GET -H 'accept: application/json' -H 'Content-Type: application/json' ${URL}/${SERVICE_NAME} | jq .
+
+# query tasks for a specific process ID
+
+PROC_INST_ID="<...your-process-instance-id...>"
+curl -s -X GET -H 'accept: application/json' -H 'Content-Type: application/json' ${URL}/${SERVICE_NAME}/${PROC_INST_ID}/tasks | jq .
+
+curl -s -X GET -H 'accept: application/json' -H 'Content-Type: application/json' "${URL}/${SERVICE_NAME}/${PROC_INST_ID}/tasks?withInputData=true&withOutputData=true&withAssignments=true" | jq .
+
+# complete task
+
+TASK_NAME="VerifyRequest"
+TASK_INST_ID="<...your-task-instance-id...>"
+TASK_PHASE="complete"
+curl -s -X POST -H 'accept: application/json' -H 'Content-Type: application/json' "${URL}/${SERVICE_NAME}/${PROC_INST_ID}/${TASK_NAME}/${TASK_INST_ID}?phase=${TASK_PHASE}"  -d '{ "validated": true }'
 
 ```
 
