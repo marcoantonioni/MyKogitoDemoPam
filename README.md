@@ -2,6 +2,11 @@
 
 Demo for IBM Kogito Operator deployments
 
+
+<i>For an example using the RedHat supported version of Kogito's Maven plugins refer to the link</i>
+
+https://github.com/marcoantonioni/IBM-BAM-OE-demos
+
 ## How I built the application
 
 set some vars
